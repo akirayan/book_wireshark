@@ -15,6 +15,7 @@
 | `packets/dns-icmp.pcapng` | 第 1 章 | 先做名稱解析再 `ping`（UDP 與 ICMP 的樣貌） | 56 | 7 kB | 34 秒 |
 | `packets/https-dns-icmp_macOS.pcapng` | 第 1 章 | 在 macOS 上 `nslookup` → `ping` → `curl https` | 156 | 109 kB | 10 秒 |
 | `packets/notepad.pcapng` | 第 5 章 | 從簡易 Web 伺服器下載一個執行檔 | 26 | 329 kB | 0.02 秒 |
+| `packets/https-gmail.pcap` | 第 3 章 | 執行一次 `curl https://www.gmail.com/`（TLS 解密用） | 38 | 11 kB | 0.08 秒 |
 
 要確認檔案有沒有齊，可以用 `capinfos`。應該會跟上面表格的封包數一致。
 
@@ -44,6 +45,7 @@ Kali 那一側開三個終端機視窗，分成**伺服器角色**（`python3 -m
 - **請關掉名稱解析再開啟。** 在 Wireshark 的 `View > Name Resolution` 把 *Resolve Network Addresses* 關掉，避免解析過程中自己的電腦跑去查 DNS。
 - **顯示的時間會依開啟的電腦的時區而變。** 檔案裡記錄的是以 UTC 為基準的值，**甚至日期都會改變**。回答時間或寫進報告的時候，請務必註明是哪一個時區的值。
 - **IP 位址、連接埠、時間都是作者環境的值。** 你自己執行同樣的指令，得到的會是不同的值。要看的不是值本身，而是封包的排列方式與結構。
+- **`https-gmail.pcap` 的金鑰紀錄檔（key log）沒有一起公開。** 打開這個檔案，只會看到加密的狀態（停在 `tls`）。因為**金鑰紀錄檔就是能把那段通訊整個剝光的鑰匙本身**。解密後的樣子刊在書籍的 §3.7。想自己試的話，請設定 `SSLKEYLOGFILE`，**用自己的通訊解自己的密**。
 - **從 `notepad.pcapng` 取得出來的 `notepad.exe` 是 Windows 內建的記事本**，不是惡意程式。第 5 章是練習「從 pcap 還原執行檔」手順的一章，但手順不論對象是檢體還是記事本，一個位元組都不會變，所以用無害的二進位檔代替。
 - 檔名雖然是 `.pcapng`，但用 `tcpdump -w` 擷取的那四個**內容是傳統的 pcap 格式**（用 `capinfos -t` 就看得出來）。Wireshark 和 tshark 都能直接開啟。書中把這件事當成「副檔名不保證檔案的內容」的實例來處理。
 
